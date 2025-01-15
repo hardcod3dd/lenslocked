@@ -38,14 +38,23 @@ func faqHandler(w http.ResponseWriter, r *http.Request) {
 `)
 }
 
+func userHandler(w http.ResponseWriter, r *http.Request) {
+	userID := chi.URLParam(r, "userID")
+	fmt.Fprintf(w, "Hello %v", userID)
+}
+
 func main() {
 	r := chi.NewRouter()
+
 	r.Get("/", homeHandler)
 	r.Get("/contact", contactHandler)
 	r.Get("/faq", faqHandler)
+	r.Get("/user/{userID}", userHandler)
+
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Page not found", http.StatusNotFound)
 	})
+
 	fmt.Println("Starting the server on :3000...")
 	http.ListenAndServe(":3000", r)
 }
